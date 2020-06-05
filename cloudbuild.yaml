@@ -1,0 +1,21 @@
+steps:
+  - name: maven:3.6.0-jdk-11-slim
+    entrypoint: "mvn"
+    args: ["clean", "install", "-q"]
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["build", "-t", "eu.gcr.io/$PROJECT_ID/ryan-portfolio:$SHORT_SHA", "."]
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["push", "eu.gcr.io/$PROJECT_ID/ryan-portfolio:$SHORT_SHA"]
+  - name: "gcr.io/cloud-builders/gcloud"
+    args:
+      - "run"
+      - "deploy"
+      - "ryan-portfolio"
+      - "--image"
+      - "eu.gcr.io/$PROJECT_ID/ryan-portfolio:$SHORT_SHA"
+      - "--region"
+      - "europe-west1"
+      - "--platform"
+      - "managed"
+images:
+  - "eu.gcr.io/$PROJECT_ID/ryan-portfolio:$SHORT_SHA"

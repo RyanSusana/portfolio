@@ -1,0 +1,4 @@
+**/target/**
+*.iml
+**/.idea/**
+**/.sass-cache/**

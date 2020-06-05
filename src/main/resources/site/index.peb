@@ -1,0 +1,136 @@
+<!DOCTYPE HTML>
+
+<html>
+<head>
+    <title>{{ home.meta.title }}</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+    <meta name="description" content="{{ home.meta.description }}"/>
+    <meta name="keywords" content="{{ home.meta.keywords }}"/>
+    <meta property="og:image" content="{{ home.meta.image }}"/>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+    <link rel="stylesheet" href="assets/css/main.css"/>
+    <noscript>
+        <link rel="stylesheet" href="assets/css/noscript.css"/>
+    </noscript>
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ home.meta.gtag }}"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', '{{ home.meta.gtag }}');
+    </script>
+
+</head>
+<body class="is-preload-0 is-preload-1">
+
+<!-- Wrapper -->
+<div id="wrapper">
+
+    <!-- Home -->
+    <article id="home" class="panel special">
+        <div class="image">
+            <img src="{{ home.image }}" alt="" data-position="center center"/>
+        </div>
+        <div class="content">
+            <div class="inner">
+                <header>
+                    <h1>{{ home.title }}</h1>
+                    <p>{{ home.subtitle | raw }}</p>
+                </header>
+                <nav id="nav">
+                    <ul class="actions stacked special animated spinY">
+                    {% for page in pages %}
+                        <li><a href="#{{ page.id }}" class="button">{{ page.title }}</a></li>{% endfor %}
+                    {% for link in home.links %}{% if link.fontAwesomeIcon is empty %}
+                        <li><a href="{{ link.location }}" class="button" target="_blank">{{ link.linkName }}</a>
+                        </li>{%endif%}{% endfor %}
+
+                    {% if home.contact.email is not empty %}
+                        <li><a href="#contact" class="button" target="_blank">Contact</a></li>{% endif %}
+                    {% if home.cv is not empty %}
+                        <li><a href="{{ home.cv }}" class="button" target="_blank">Download my CV</a></li>{%endif%}
+                    </ul>
+                </nav>
+                <ul class="icons">
+                {% for link in home.links %}{% if link.fontAwesomeIcon is not empty %}
+                    <li><a href="{{ link.location }}" target="_blank" class="icon {{ link.fontAwesomeIcon }}"><span
+                            class="label">{{ link.linkName }}</span></a>
+                    </li>{% endif %}{% endfor %}
+                </ul>
+            </div>
+        </div>
+    </article>
+    {% for page in pages %}
+        <article id="{{ page.id }}" class="panel secondary">
+            <div class="image">
+                <img src="{{ page.image }}" alt="" data-position="center center"/>
+            </div>
+            <div class="content">
+                <ul class="actions animated spinX">
+                    <li><a href="#" class="button small back">Back</a></li>
+                </ul>
+                <div class="inner">
+                    <header>
+                        <h2>{{ page.title }}</h2>
+                        <p>{{ page.subtitle |  raw }}</p>
+                    </header>
+                    {{ page.content | raw}}
+                </div>
+            </div>
+        </article>{% endfor %}
+
+    <!-- Contact -->
+    <article id="contact" class="panel secondary">
+        <div class="image">
+            <img src="{{ home.contact.image }}" alt="" data-position="bottom center"/>
+        </div>
+        <div class="content">
+            <ul class="actions animated spinX">
+                <li><a href="#" class="button small back">Back</a></li>
+            </ul>
+            <div class="inner">
+                <header>
+                    <h2>Contact</h2>
+                </header>
+                <form method="post" action="https://formspree.io/{{ home.contact.email }}">
+                    <div class="fields">
+                        <div class="field half">
+                            <label for="name">Name</label>
+                            <input type="text" name="name" id="name"/>
+                        </div>
+                        <div class="field half">
+                            <label for="_replyto">Email</label>
+                            <input type="text" name="email" id="email"/>
+                        </div>
+                        <div class="field">
+                            <label for="message">Message</label>
+                            <textarea name="message" id="message" rows="5"></textarea>
+                        </div>
+                    </div>
+                    <ul class="actions">
+                        <li><button type="submit" class="button submit">Send Message</button></li>
+                    </ul>
+                </form>
+            </div>
+        </div>
+    </article>
+
+    <!-- Footer -->
+    <footer id="footer">
+        <p class="copyright">&copy; {{ home.copyright }}</p>
+    </footer>
+
+</div>
+
+<!-- Scripts -->
+<script src="assets/js/compressed.js"></script>
+
+</body>
+</html>
