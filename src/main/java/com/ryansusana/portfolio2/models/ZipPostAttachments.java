@@ -48,7 +48,8 @@ public class ZipPostAttachments implements ActionHandler<Post> {
     private void ensureFilesOnServer(Set<String> ids) {
 
         final var home = System.getProperty("user.home").concat("/portfolio-attachments/");
-        Files.createDirectory(Paths.get(home));
+        if (!Files.exists(Paths.get(home)))
+            Files.createDirectory(Paths.get(home));
         ids.stream()
                 .filter(id -> !new File(home + id).exists())
                 .map(files::readFile)
@@ -64,10 +65,12 @@ public class ZipPostAttachments implements ActionHandler<Post> {
     private InputStream zipFiles(String attachment, Set<String> filePaths) {
 
         final var file = new File(attachment);
+        final var home = System.getProperty("user.home").concat("/portfolio-attachments/");
         if (!file.exists()) {
             try (FileOutputStream fos = new FileOutputStream(attachment);
                  ZipOutputStream zos = new ZipOutputStream(fos)) {
-                for (String aFile : filePaths) {
+                for (String path : filePaths) {
+                    String aFile = path.replaceAll("/elepy/uploads/", home);
                     zos.putNextEntry(new ZipEntry(new File(aFile).getName()));
 
                     byte[] bytes = Files.readAllBytes(Paths.get(aFile));
