@@ -11,7 +11,7 @@ import java.util.List;
 @Setter
 @Model(path = "/posts", name = "Posts", defaultSortField = "week")
 @IdProvider(SlugIdentityProvider.class)
-@Action(handler = ZipPostAttachments.class, requiredPermissions = "", name = "Download Attachments", path = "/download-attachments")
+@Action(handler = ZipPostAttachments.class, requiredPermissions = {}, name = "Download Attachments", path = "/download-attachments")
 public class Post {
     private String id;
 
