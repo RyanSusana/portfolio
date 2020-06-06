@@ -41,6 +41,7 @@ public class ZipPostAttachments implements ActionHandler<Post> {
             throw new ElepyException("No files found", 400);
         }
         ensureFilesOnServer(fileUploadsId);
+        context.response().type("application/zip");
         context.response().result(IOUtils.toByteArray(zipFiles(zipFile, fileUploadsId)));
     }
 
