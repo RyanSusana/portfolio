@@ -11,7 +11,6 @@ import java.util.List;
 @Setter
 @Model(path = "/posts", name = "Posts", defaultSortField = "week")
 @IdProvider(SlugIdentityProvider.class)
-@Action(handler = ZipPostAttachments.class, requiredPermissions = {}, name = "Download Attachments", path = "/download-attachments")
 public class Post {
     private String id;
 
@@ -27,7 +26,7 @@ public class Post {
     @PrettyName("Categories")
     private List<@Reference(to = Category.class) String> categoryIds;
 
-    private List<@FileReference String> attachments;
+    private List<Attachment> downloads;
 
     @HTML
     @Importance(-1)
