@@ -11,6 +11,7 @@ import java.util.List;
 @Setter
 @Model(path = "/posts", name = "Posts", defaultSortField = "week")
 @IdProvider(SlugIdentityProvider.class)
+@Action(handler = ZipPostAttachments.class, requiredPermissions = "", name = "Download Attachments", path = "/download-attachments")
 public class Post {
     private String id;
 
@@ -23,13 +24,14 @@ public class Post {
     @TrueFalse(trueValue = "Show on site", falseValue = "Don't show on site")
     private Boolean show = true;
 
+    @PrettyName("Categories")
+    private List<@Reference(to = Category.class) String> categoryIds;
+
+    private List<@FileReference String> attachments;
+
     @HTML
     @Importance(-1)
     private String content;
-
-
-    @PrettyName("Categories")
-    private List<@Reference(to = Category.class) String> categoryIds;
 
 
 } 
