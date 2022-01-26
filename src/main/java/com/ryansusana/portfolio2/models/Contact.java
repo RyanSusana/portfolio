@@ -1,7 +1,7 @@
 package com.ryansusana.portfolio2.models;
 
 import com.elepy.annotations.FileReference;
-import com.elepy.annotations.PrettyName;
+import com.elepy.annotations.Label;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,7 +10,7 @@ import lombok.Setter;
 public class Contact {
 
 
-    @PrettyName("Email Address")
+    @Label("Email Address")
     private String email;
 
     @FileReference(allowedMimeType = "image/*")

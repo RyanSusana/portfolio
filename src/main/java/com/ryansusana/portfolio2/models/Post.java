@@ -23,7 +23,7 @@ public class Post {
     @TrueFalse(trueValue = "Show on site", falseValue = "Don't show on site")
     private Boolean show = true;
 
-    @PrettyName("Categories")
+    @Label("Categories")
     private List<@Reference(to = Category.class) String> categoryIds;
 
     private List<Attachment> downloads;
