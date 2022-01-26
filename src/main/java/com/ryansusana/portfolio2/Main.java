@@ -24,7 +24,7 @@ public class Main {
             String username = System.getenv("DATABASE_USERNAME");
             String password = System.getenv("DATABASE_PASSWORD");
             String server = System.getenv("DATABASE_SERVER");
-            final var rawUri = String.format("mongodb+srv://%s:%s@%s/?maxPoolSize=25", username, password, server);
+            final var rawUri = String.format("mongodb+srv://%s:%s@%s", username, password, server);
             System.out.println(rawUri);
             MongoClientURI uri = new MongoClientURI(rawUri);
 
