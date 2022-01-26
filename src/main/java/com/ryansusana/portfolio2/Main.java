@@ -6,6 +6,7 @@ import com.elepy.Elepy;
 import com.elepy.admin.AdminPanel;
 import com.elepy.mongo.MongoConfiguration;
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoClientURI;
 
 import java.util.Optional;
@@ -23,7 +24,8 @@ public class Main {
             String username = System.getenv("DATABASE_USERNAME");
             String password = System.getenv("DATABASE_PASSWORD");
             String server = System.getenv("DATABASE_SERVER");
-            MongoClientURI uri = new MongoClientURI(String.format("mongodb+srv://%s:%s@%s", username, password, server));
+            MongoClientURI uri = new MongoClientURI(String.format("mongodb+srv://%s:%s@%s?maxPoolSize=25", username, password, server));
+
 
             MongoClient mongoClient = new MongoClient(uri);
 
