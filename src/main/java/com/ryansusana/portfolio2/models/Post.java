@@ -2,6 +2,7 @@ package com.ryansusana.portfolio2.models;
 
 import com.elepy.annotations.*;
 import com.elepy.id.SlugIdentityProvider;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,6 +12,7 @@ import java.util.List;
 @Setter
 @Model(path = "/posts", name = "Posts", defaultSortField = "week")
 @IdProvider(SlugIdentityProvider.class)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Post {
     private String id;
 

@@ -2,6 +2,8 @@ package com.ryansusana.portfolio2.models;
 
 import com.elepy.annotations.*;
 import com.elepy.id.SlugIdentityProvider;
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,7 +12,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @Model(name = "Pages", path = "/pages")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Page {
+
+    @JsonAlias("id")
+    @Identifier
     private String id;
 
     @FileReference(allowedMimeType = "image/*")

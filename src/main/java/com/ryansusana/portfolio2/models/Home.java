@@ -3,6 +3,7 @@ package com.ryansusana.portfolio2.models;
 import com.elepy.annotations.FileReference;
 import com.elepy.annotations.Model;
 import com.elepy.annotations.View;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,6 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @Model(name = "Home", path = "/settings")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Home {
     private String id;
 

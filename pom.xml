@@ -73,12 +73,12 @@
         <dependency>
             <groupId>com.elepy</groupId>
             <artifactId>elepy-basic</artifactId>
-            <version>3.0.0-alpha-28</version>
+            <version>3.0.0-alpha-29</version>
         </dependency>
         <dependency>
             <groupId>com.elepy</groupId>
             <artifactId>elepy-mongo</artifactId>
-            <version>3.0.0-alpha-28</version>
+            <version>3.0.0-alpha-29</version>
         </dependency>
         <dependency>
             <groupId>de.bwaldvogel</groupId>
