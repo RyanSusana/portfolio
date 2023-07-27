@@ -66,6 +66,11 @@
     </build>
     <dependencies>
         <dependency>
+            <groupId>com.google.cloud.opentelemetry</groupId>
+            <artifactId>exporter-trace</artifactId>
+            <version>0.24.0</version>
+        </dependency>
+        <dependency>
             <groupId>io.pebbletemplates</groupId>
             <artifactId>pebble</artifactId>
             <version>3.1.2</version>

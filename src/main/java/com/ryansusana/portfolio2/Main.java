@@ -5,22 +5,34 @@ import com.elepy.Configuration;
 import com.elepy.Elepy;
 import com.elepy.admin.AdminPanel;
 import com.elepy.mongo.MongoConfiguration;
+import com.google.cloud.opentelemetry.trace.TraceExporter;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoClientURI;
+import io.opentelemetry.sdk.OpenTelemetrySdk;
+import io.opentelemetry.sdk.trace.SdkTracerProvider;
+import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
 
+import java.io.IOException;
 import java.util.Optional;
 
 public class Main {
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         final Configuration mongoConfig;
 
         if ("TEST".equals(System.getenv("environment"))) {
             mongoConfig = MongoConfiguration.inMemory();
         } else {
+            TraceExporter traceExporter = TraceExporter.createWithDefaultConfiguration();
+            OpenTelemetrySdk.builder()
+                    .setTracerProvider(
+                            SdkTracerProvider.builder()
+                                    .addSpanProcessor(BatchSpanProcessor.builder(traceExporter).build())
+                                    .build())
+                    .buildAndRegisterGlobal();
             String username = System.getenv("DATABASE_USERNAME");
             String password = System.getenv("DATABASE_PASSWORD");
             String server = System.getenv("DATABASE_SERVER");
