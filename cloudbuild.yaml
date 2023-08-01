@@ -7,8 +7,10 @@ steps:
   - name: "gcr.io/cloud-builders/docker"
     args: ["push", "eu.gcr.io/$PROJECT_ID/ryan-portfolio:$SHORT_SHA"]
   - name: 'bash'
+    env:
+      - 'TAG=$SHORT_SHA'
     script: |
-      sed -i s/{{TAG}}/${SHORT_SHA}/g service.yaml
+      sed -i s/{{TAG}}/$TAG/g service.yaml
       cat service.yaml
   - name: "gcr.io/cloud-builders/gcloud"
     args:
