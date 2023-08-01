@@ -1,0 +1,46 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: ryan-portfolio
+  namespace: '792667878281'
+  labels:
+    cloud.googleapis.com/location: europe-west1
+  annotations:
+    run.googleapis.com/client-name: gcloud
+    run.googleapis.com/ingress: all
+    run.googleapis.com/ingress-status: all
+spec:
+  template:
+    metadata:
+      labels:
+        run.googleapis.com/startupProbeType: Default
+      annotations:
+        autoscaling.knative.dev/maxScale: '2'
+    spec:
+      containerConcurrency: 250
+      timeoutSeconds: 300
+      serviceAccountName: 792667878281-compute@developer.gserviceaccount.com
+      containers:
+        - image: eu.gcr.io/promuzi-172519/ryan-portfolio:{{TAG}}
+          ports:
+            - name: http1
+              containerPort: 8080
+          env:
+            - name: DATABASE_CONNECTION_STRING
+              valueFrom:
+                secretKeyRef:
+                  key: "1"
+                  name: portfolio_connection_string
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 2Gi
+          startupProbe:
+            timeoutSeconds: 240
+            periodSeconds: 240
+            failureThreshold: 1
+            tcpSocket:
+              port: 8080
+  traffic:
+    - percent: 100
+      latestRevision: true

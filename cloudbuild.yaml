@@ -6,16 +6,16 @@ steps:
     args: ["build", "-t", "eu.gcr.io/$PROJECT_ID/ryan-portfolio:$SHORT_SHA", "."]
   - name: "gcr.io/cloud-builders/docker"
     args: ["push", "eu.gcr.io/$PROJECT_ID/ryan-portfolio:$SHORT_SHA"]
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'bash'
+    args: [ '-c', 'sed', "-i", "s/{{TAG}}/$SHORT_SHA/g", 'service.yaml' ]
   - name: "gcr.io/cloud-builders/gcloud"
     args:
       - "run"
-      - "deploy"
-      - "ryan-portfolio"
-      - "--image"
-      - "eu.gcr.io/$PROJECT_ID/ryan-portfolio:$SHORT_SHA"
+      - "services"
+      - "replace"
       - "--region"
       - "europe-west1"
-      - "--platform"
-      - "managed"
+      - "service.yaml"
 images:
   - "eu.gcr.io/$PROJECT_ID/ryan-portfolio:$SHORT_SHA"

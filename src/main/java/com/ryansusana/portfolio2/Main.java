@@ -5,16 +5,14 @@ import com.elepy.Configuration;
 import com.elepy.Elepy;
 import com.elepy.admin.AdminPanel;
 import com.elepy.mongo.MongoConfiguration;
-import com.google.cloud.opentelemetry.trace.TraceExporter;
 import com.mongodb.MongoClient;
-import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoClientURI;
-import io.opentelemetry.sdk.OpenTelemetrySdk;
-import io.opentelemetry.sdk.trace.SdkTracerProvider;
-import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
+import io.opentelemetry.api.trace.Tracer;
+import io.opentelemetry.sdk.autoconfigure.AutoConfiguredOpenTelemetrySdk;
 
 import java.io.IOException;
 import java.util.Optional;
+
 
 public class Main {
 
@@ -23,30 +21,28 @@ public class Main {
 
         final Configuration mongoConfig;
 
+        var autoConfiguredOtel = AutoConfiguredOpenTelemetrySdk.initialize();
+        var otel = autoConfiguredOtel.getOpenTelemetrySdk();
+
+
         if ("TEST".equals(System.getenv("environment"))) {
             mongoConfig = MongoConfiguration.inMemory();
+            Tracer tracer =
+                    otel.getTracer("instrumentation-library-name", "1.0.0");
+            var childSpan = tracer.spanBuilder("child")
+//                    .setParent(Context.current().with(parentSpan))
+                    .startSpan();
+            try {
+                // do stuff
+            } finally {
+                childSpan.end();
+            }
         } else {
-            TraceExporter traceExporter = TraceExporter.createWithDefaultConfiguration();
-            OpenTelemetrySdk.builder()
-                    .setTracerProvider(
-                            SdkTracerProvider.builder()
-                                    .addSpanProcessor(BatchSpanProcessor.builder(traceExporter).build())
-                                    .build())
-                    .buildAndRegisterGlobal();
-            String username = System.getenv("DATABASE_USERNAME");
-            String password = System.getenv("DATABASE_PASSWORD");
-            String server = System.getenv("DATABASE_SERVER");
-            final var rawUri = String.format("mongodb+srv://%s:%s@%s", username, password, server);
-            System.out.println(rawUri);
+            final var rawUri = System.getenv("DATABASE_CONNECTION_STRING");
             MongoClientURI uri = new MongoClientURI(rawUri);
-
-
             MongoClient mongoClient = new MongoClient(uri);
-
             mongoConfig = MongoConfiguration.of(mongoClient, "portfolio", "files");
-
         }
-
 
         final Elepy elepy = new Elepy()
                 .addConfiguration(AdminPanel.local())
@@ -56,8 +52,6 @@ public class Main {
                 .addExtension(new FrontendExtension());
 
         elepy.http().staticFiles("site");
-
         elepy.start();
-
     }
 }
